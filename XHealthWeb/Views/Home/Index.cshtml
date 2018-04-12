@@ -1,0 +1,55 @@
+@model XHealthWeb.ViewModels.ExportViewModels.ExportIndexData
+
+@{
+    ViewData["Title"] = "XHealth Data Export Home Page";
+}
+
+<h2>XHealth Data Export</h2>
+
+<div class="panel-group">
+    @foreach (var item in Model.ExportHistories.GroupBy(g => g.Client).Select(s => s.Key))
+    {
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>@Html.Raw(item.Name) Data Export</h4>
+                <div style="margin-top: -37px;" class="pull-right">
+                    <a class="btn btn-default" asp-action="Export" asp-route-id="@item.ClientID">Export Data</a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Accounts Processed
+                            </th>
+                            <th>
+                                Total Balance
+                            </th>
+                            <th>
+                                Export Date
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var exp in Model.ExportHistories.Where(w => w.Client == item))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.Raw(exp.Accounts)
+                                </td>
+                                <td>
+                                    @Html.Raw(String.Format("{0:C}", exp.Balance))
+                                </td>
+                                <td>
+                                    @Html.Raw(exp.ExportDate.ToShortDateString())
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
